@@ -1,3 +1,7 @@
+/*
+ * See LICENSE file.
+ */
+
 #import('dart:html');
 
 WebSocket ws;
