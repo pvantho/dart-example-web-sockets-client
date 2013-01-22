@@ -1,0 +1,5 @@
+name:  dart_html_websocket_example
+description:  Example of using Web Sockets with Dart HTML
+
+dependencies:
+  browser: any

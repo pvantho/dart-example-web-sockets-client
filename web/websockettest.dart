@@ -2,7 +2,8 @@
  * See LICENSE file.
  */
 
-#import('dart:html');
+import 'dart:html';
+import 'dart:async';
 
 WebSocket ws;
 
@@ -12,28 +13,28 @@ outputMsg(String msg) {
 }
 
 void initWebSocket([int retrySeconds = 2]) {
-  bool encounteredError = false;
+  var encounteredError = false;
   
   outputMsg("Connecting to Web socket");
   ws = new WebSocket('ws://echo.websocket.org');
   
-  ws.on.open.add((e) {
+  ws.onOpen.listen((e) {
     outputMsg('Connected');
     ws.send('Hello from Dart!');
   });
   
-  ws.on.close.add((e) {
+  ws.onClose.listen((e) {
     outputMsg('web socket closed, retrying in $retrySeconds seconds');
     if (!encounteredError) {
-      window.setTimeout(() => initWebSocket(retrySeconds*2), 1000*retrySeconds);
+      new Timer(1000*retrySeconds, (t) => initWebSocket(retrySeconds*2));
     }
     encounteredError = true;
   });
   
-  ws.on.error.add((e) {
+  ws.onError.listen((e) {
     outputMsg("Error connecting to ws");
     if (!encounteredError) {
-      window.setTimeout(() => initWebSocket(retrySeconds*2), 1000*retrySeconds);
+      new Timer(1000*retrySeconds, (t) => initWebSocket(retrySeconds*2));
     }
     encounteredError = true;
   });
