@@ -26,7 +26,8 @@ void initWebSocket([int retrySeconds = 2]) {
   ws.onClose.listen((e) {
     outputMsg('web socket closed, retrying in $retrySeconds seconds');
     if (!encounteredError) {
-      new Timer(1000*retrySeconds, (t) => initWebSocket(retrySeconds*2));
+      new Timer(new Duration(seconds:retrySeconds),
+          () => initWebSocket(retrySeconds*2));
     }
     encounteredError = true;
   });
@@ -34,12 +35,13 @@ void initWebSocket([int retrySeconds = 2]) {
   ws.onError.listen((e) {
     outputMsg("Error connecting to ws");
     if (!encounteredError) {
-      new Timer(1000*retrySeconds, (t) => initWebSocket(retrySeconds*2));
+      new Timer(new Duration(seconds:retrySeconds),
+          () => initWebSocket(retrySeconds*2));
     }
     encounteredError = true;
   });
   
-  ws.on.message.add((MessageEvent e) {
+  ws.onMessage.listen((MessageEvent e) {
     outputMsg('received message ${e.data}');
   });
 }

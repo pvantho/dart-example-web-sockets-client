@@ -1,5 +1,4 @@
 .children
 .project
 .DS_Store
-packages/
-web/packages/
+packages
